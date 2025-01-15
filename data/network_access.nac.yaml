@@ -1,0 +1,91 @@
+---
+ise:
+  network_access:
+    policy_elements:
+      downloadable_acls:
+        - name: PERMIT_Dacl
+          description: Permit ip
+          dacl_content: permit ip any any
+      authorization_profiles:
+        - name: Host01_access
+          description: "Host01_Campus"
+          access_type: "ACCESS_ACCEPT"
+          track_movement: false
+          agentless_posture: false
+          service_template: false
+          easywired_session_candidate: false
+          dacl_name: PERMIT_Dacl
+          profile_name: "Cisco"
+          vlan_tag_id: 1
+          vlan_name_id: 192_168_100_0-Campus
+        - name: Host02_access
+          description: "Host02_Campus"
+          access_type: "ACCESS_ACCEPT"
+          track_movement: false
+          agentless_posture: false
+          service_template: false
+          easywired_session_candidate: false
+          dacl_name: PERMIT_Dacl
+          profile_name: "Cisco"
+          vlan_tag_id: 1
+          vlan_name_id: 192_168_100_0-Campus
+    policy_sets:
+      - name: Wired Access Policy
+        description: Wired Access
+        condition:
+          type: ConditionAttributes
+          dictionary_name: DEVICE
+          attribute_name: Location
+          operator: equals
+          attribute_value: All Locations
+        service_name: Default Network Access
+        authentication_rules:
+          - name: DOT1x_wired
+            state: enabled
+            condition:
+              type: ConditionAndBlock
+              children:
+                - type: ConditionAttributes
+                  dictionary_name: CERTIFICATE
+                  attribute_name: Subject - Common Name
+                  operator: contains
+                  attribute_value: Workstation
+                - type: ConditionReference
+                  name: Wired_802.1X
+            identity_source_name: Preloaded_Certificate_Profile
+            if_auth_fail: REJECT
+            if_user_not_found: CONTINUE
+            if_process_fail: DROP
+          - name: MAB_wired
+            condition:
+              type: ConditionReference
+              name: Wired_MAB
+            identity_source_name: Internal Endpoints
+            if_auth_fail: REJECT
+            if_user_not_found: CONTINUE
+            if_process_fail: DROP
+        authorization_rules:
+          - name: Host01 Authorization
+            condition:
+              type: ConditionAttributes
+              dictionary_name: IdentityGroup
+              attribute_name: Name
+              operator: equals
+              attribute_value: Endpoint Identity Groups:CampusEndpoints01
+            profiles:
+              - Host01_access
+            security_group: SGT1
+          - name: Host02 Authorization
+            condition:
+              type: ConditionAttributes
+              dictionary_name: IdentityGroup
+              attribute_name: Name
+              operator: equals
+              attribute_value: Endpoint Identity Groups:CampusEndpoints02
+            profiles:
+              - Host02_access
+            security_group: SGT2
+          - name: Default
+            state: enabled
+            profiles:
+              - DenyAccess

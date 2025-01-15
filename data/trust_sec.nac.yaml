@@ -1,0 +1,17 @@
+---
+ise:
+  trust_sec:
+    security_groups:
+      - name: SGT1
+        description: SGT1
+        value: 1001
+      - name: SGT2
+        description: SGT2
+        value: 1002 
+    matrix_entries:
+      - source_sgt: SGT1
+        destination_sgt: SGT2
+        sgacl_name: Deny IP
+      - source_sgt: SGT2
+        destination_sgt: SGT1
+        sgacl_name: Deny IP
