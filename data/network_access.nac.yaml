@@ -85,6 +85,12 @@ ise:
             profiles:
               - Host02_access
             security_group: SGT2
+          - name: Basic_Authenticated_Access
+            condition:
+              type: ConditionReference
+              name: Network_Access_Authentication_Passed
+            profiles:
+              - PermitAccess
           - name: Default
             state: enabled
             profiles:
