@@ -7,7 +7,7 @@ ise:
         value: 1001
       - name: SGT2
         description: SGT2
-        value: 1002 
+        value: 1002
     matrix_entries:
       - source_sgt: SGT1
         destination_sgt: SGT2
