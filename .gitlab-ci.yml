@@ -31,6 +31,15 @@ variables:
   TF_HTTP_UNLOCK_METHOD:
     description: "Method to unlock TF state file"
     value: DELETE
+  GODEBUG:
+    description: "Disable IPv6 for terraform operations"
+    value: net.ipv6=off
+
+# DNS patch
+before_script:
+  - cp /etc/resolv.conf /tmp/resolv.conf
+  - sed -i 's/8\.8\.8\.8/1.1.1.1/g' /tmp/resolv.conf
+  - cp /tmp/resolv.conf /etc/resolv.conf
 
 cache:
   key: terraform_modules_and_lock
