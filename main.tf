@@ -2,14 +2,13 @@ terraform {
   required_providers {
     ise = {
       source  = "CiscoDevNet/ise"
-      version = "0.2.7"
+      version = "0.2.14"
     }
   }
 }
 
 module "ise" {
-  source  = "netascode/nac-ise/ise"
-  version = "0.2.1"
+  source = "git::https://github.com/netascode/terraform-ise-nac-ise.git?ref=dev"
 
   yaml_directories = ["data/"]
 }
