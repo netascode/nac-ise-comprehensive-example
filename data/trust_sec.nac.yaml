@@ -8,10 +8,12 @@ ise:
       - name: SGT2
         description: SGT2
         value: 1002
-    matrix_entries:
-      - source_sgt: SGT1
-        destination_sgt: SGT2
-        sgacl_name: Deny IP
-      - source_sgt: SGT2
-        destination_sgt: SGT1
-        sgacl_name: Deny IP
+    matrices:
+      - name: Production
+        matrix_entries:
+          - source_sgt: SGT1
+            destination_sgt: SGT2
+            sgacl_name: Deny IP
+          - source_sgt: SGT2
+            destination_sgt: SGT1
+            sgacl_name: Deny IP
